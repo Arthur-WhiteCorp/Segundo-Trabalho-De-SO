@@ -1,15 +1,25 @@
 import java.util.Random;
 import java.util.concurrent.RecursiveAction;
+
+import javax.swing.JOptionPane;
+
 import java.util.concurrent.ForkJoinPool;
 
 public class QuickSortMultiThread {
-    private static final int numThreads = Runtime.getRuntime().availableProcessors();
+    //private int static final numThreads = Runtime.getRuntime().availableProcessors();
+    private static int numThreads;
 
     public QuickSortMultiThread(){
-        System.out.println("Num threads: "+numThreads);
+        //System.out.println("Num threads: "+numThreads);
     }
 
     public static void quicksort(int[] array) {
+        int tamanho=0;
+        String tamanString = JOptionPane.showInputDialog("Insira o numero de threads: ");
+        tamanho = Integer.parseInt(tamanString);
+        QuickSortMultiThread.numThreads=tamanho;
+        
+        
         ForkJoinPool pool = new ForkJoinPool(numThreads);
         pool.invoke(new QuickSortTask(array, 0, array.length - 1));
     }
@@ -53,8 +63,36 @@ public class QuickSortMultiThread {
             array[j] = temp;
         }
     }
+    public static void main(String[] args) {
+//        int[] array = {10, 7, 8, 9, 1, 5};
+        int tamanho=10;
+        int limiteInferior=1;
+        int limiteSuperior=10000;
 
-    public static boolean estaOrdenadoCrescente(int[] vetor) {
+        String tamaho_vetor = JOptionPane.showInputDialog("Insira o tamanho do vetor: ");
+        tamanho = Integer.parseInt(tamaho_vetor);
+
+        Utilitarios utilitarios = new Utilitarios();
+
+        int[] array = utilitarios.gerarVetor(tamanho,limiteInferior,limiteSuperior);
+        long startTime = System.currentTimeMillis();
+        quicksort(array);
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+//        for (int i : array) {
+//            System.out.print(i + " ");
+//        }
+       System.out.println(utilitarios.estaOrdenadoCrescente(array));
+       System.out.println("Tempo millisegundos: "+duration);
+       System.err.println("Numero threads:"+numThreads);
+
+
+       JOptionPane.showMessageDialog(null,"Tempo para um vetor de tamanho "+tamaho_vetor+" com "+numThreads+": "+duration+" ms","QuickSort",JOptionPane.DEFAULT_OPTION);
+    }
+}
+
+class Utilitarios{
+    public boolean estaOrdenadoCrescente(int[] vetor) {
         for (int i = 1; i < vetor.length; i++) {
             if (vetor[i - 1] > vetor[i]) {
                 return false;
@@ -63,28 +101,12 @@ public class QuickSortMultiThread {
         return true;
     }
 
-    public static int[] gerarVetor(int tamanho, int limiteInferior, int limiteSuperior) {
+    public  int[] gerarVetor(int tamanho, int limiteInferior, int limiteSuperior) {
         Random random = new Random();
         int[] vetor = new int[tamanho];
         for (int i = 0; i < tamanho; i++) {
             vetor[i] = random.nextInt(limiteSuperior - limiteInferior + 1) + limiteInferior;
         }
         return vetor;
-    }
-    public static void main(String[] args) {
-//        int[] array = {10, 7, 8, 9, 1, 5};
-        int tamanho=20000000;
-        int limiteInferior=1;
-        int limiteSuperior=10000;
-        int[] array = gerarVetor(tamanho,limiteInferior,limiteSuperior);
-        long startTime = System.currentTimeMillis();
-        quicksort(array);
-        long endTime = System.currentTimeMillis();
-        long duration = endTime - startTime;
-//        for (int i : array) {
-//            System.out.print(i + " ");
-//        }
-//        System.out.println(estaOrdenadoCrescente(array));
-        System.out.println("Tempo millisegundos: "+duration);
     }
 }

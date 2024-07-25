@@ -1,6 +1,8 @@
 import java.util.Arrays;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 public class QuickSort {
 
     public static boolean estaOrdenadoCrescente(int[] vetor) {
@@ -22,9 +24,17 @@ public class QuickSort {
     }
     public static void main(String[] args) {
 //        int[] array = {7, 2, 1, 6, 8, 5, 3, 4};
-        int tamanho=20000000;
+        int tamanho=1000000;
         int limiteInferior=1;
         int limiteSuperior=10000;
+
+        String tamanString = JOptionPane.showInputDialog("Insira o tamanho do vetor: ");
+        tamanho = Integer.parseInt(tamanString);
+
+        // JOptionPane.showMessageDialog(null,tamanString,"QuickSort",JOptionPane.DEFAULT_OPTION);
+
+        // JOptionPane.showMessageDialog(null, "alerta","alerta", JOptionPane.ERROR_MESSAGE);
+
 
 
         int[] array = gerarVetor(tamanho,limiteInferior,limiteSuperior);
@@ -36,7 +46,8 @@ public class QuickSort {
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
 //        System.out.println(estaOrdenadoCrescente(array));
-        System.out.println("Tempo millisegundos: "+duration);
+        // System.out.println("Tempo millisegundos: "+duration);
+        JOptionPane.showMessageDialog(null,"Tempo  para um vetor de tamanho "+tamanString+": "+duration+" ms","QuickSort",JOptionPane.DEFAULT_OPTION);
 
 //        System.out.println("Array depois do Quicksort: " + Arrays.toString(array));
     }
